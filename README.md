@@ -1,8 +1,8 @@
-**Medieval Simulator - A Turn-Based Simulation Of A Kingdom In Chaos**
+<ins>**Medieval Simulator - A Turn-Based Simulation Of A Kingdom In Chaos**</ins>
 
 This project is a fun and interactive way to explore the complexities of medieval kingdom management through simulation and AI-driven gameplay.
 
-**Features:**
+<ins>**Features:**</ins>
 
 **Tile-Based Map:**
   A dynamic grid-based map rendered on an HTML canvas.
