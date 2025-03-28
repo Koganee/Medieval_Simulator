@@ -9,7 +9,7 @@ Tile-Based Map:
   Entities such as knights, peasants, merchants, and monsters are visually represented with unique colors.
   
 King's Decisions:
-  Players make decisions as the king, such as hiring, commissioning, spreading propaganda, or attacking other entities.
+  The king makes decisions such as hiring, commissioning, spreading propaganda, or attacking other entities.
   Each decision influences the kingdom's trust level, entity behaviors, and overall simulation outcomes.
   
 AI-Driven Behaviors:
