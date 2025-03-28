@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Play</title>
+    <style>
+        canvas {
+            display: block;
+            margin: 0 auto;
+            background-color: #000;
+        }
+    </style>
+    <script src="global_state.js"></script>
+    <script src="decisionAI_King.js"></script>
+    <script src="decisionAI_Knights.js"></script>
+    <script src="decisionAI_Monsters.js"></script>
+    <script src="news_bulletin.js"></script>
+<button id="nextTurn" style = "text-align: center;" onclick="nextTurn()">Next Turn</button>
+</head>
+<body>
+    <canvas id="playCanvas"></canvas>
+    <div id="popup" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border: 2px solid black; z-index: 1000;">
+        <p id="popupContent"></p>
+        <button onclick="closePopup()">Close</button>
+    </div>
+    <div id="sidebar" style="display: none; position: fixed; top: 0; right: 0; width: 300px; height: 100%; background: rgba(0, 0, 0, 0.9); color: white; overflow-y: auto; z-index: 1000; padding: 20px;">
+        <h3>News Bulletin</h3>
+        <ul id="newsList" style="list-style: none; padding: 0;"></ul>
+        <button onclick="closeSidebar()" style="margin-top: 10px; background: white; color: black; border: none; padding: 10px; cursor: pointer;">Close</button>
+    </div>
+    <button onclick="openSidebar()" style="position: fixed; top: 10px; right: 10px; background: white; color: black; border: none; padding: 10px; cursor: pointer; z-index: 1001;">News</button>
+    <script>
+        console.log("Script loaded successfully.");
+        const playCanvas = document.getElementById('playCanvas');
+        const ctx = playCanvas.getContext('2d');
+
+        // Define the entities array
+        const entities = [
+            { total: 20, color: "white" }, // Knights
+            { total: 15, color: "blue" }, // Merchants
+            { total: 8, color: "darkorange" }, // Bandits
+            { total: 5, color: "purple" }, // Artists
+            { total: 10, color: "darkgreen" }, // Mercenaries
+            { total: 25, color: "black" } // Monsters
+        ];
+
+        // Match dimensions of the canvas from game.html
+        playCanvas.width = 1800;
+        playCanvas.height = 900;
+
+        // Copy the tilemap rendering logic from game.html
+        const tileSize = 5;
+        const rows = playCanvas.height / tileSize;
+        const cols = playCanvas.width / tileSize;
+
+        // Adjust the tilemap rendering logic to place the king at the center
+        const centerRow = Math.floor(rows / 2);
+        const centerCol = Math.floor(cols / 2);
+        
+        for (let row = 0; row < rows; row++) {
+            for (let col = 0; col < cols; col++) {
+                ctx.fillStyle = "green";
+                ctx.fillRect(col * tileSize, row * tileSize, tileSize, tileSize);
+            }
+        }
+
+        // Place the king at the center
+        ctx.fillStyle = "gold";
+        ctx.fillRect(centerCol * tileSize, centerRow * tileSize, tileSize, tileSize);
+
+        // Place peasants around the king
+        const peasantRadius = 10; // Define the radius around the king
+        const peasants = 50;
+
+        let placedPeasants = 0;
+        while (placedPeasants < peasants) {
+            const randomRow = centerRow + Math.floor(Math.random() * (peasantRadius * 2 + 1)) - peasantRadius;
+            const randomCol = centerCol + Math.floor(Math.random() * (peasantRadius * 2 + 1)) - peasantRadius;
+
+            // Ensure peasants are within bounds and not overlapping the king
+            if (
+                randomRow >= 0 && randomRow < rows &&
+                randomCol >= 0 && randomCol < cols &&
+                !(randomRow === centerRow && randomCol === centerCol)
+            ) {
+                ctx.fillStyle = "grey";
+                ctx.fillRect(randomCol * tileSize, randomRow * tileSize, tileSize, tileSize);
+                placedPeasants++;
+            }
+        }
+
+        entities.forEach(entity => {
+            for (let i = 0; i < entity.total; i++) {
+                const randomRow = Math.floor(Math.random() * rows);
+                const randomCol = Math.floor(Math.random() * cols);
+                ctx.fillStyle = entity.color;
+                ctx.fillRect(randomCol * tileSize, randomRow * tileSize, tileSize, tileSize);
+            }
+        });
+
+        function nextTurn() {
+            closePopup();
+
+            // Decision Code
+            //Generates random decision for king to make, which will then influence other class decisions in .js files.
+            const randomNumber = Math.floor(Math.random() * 6) + 1;
+            console.log("Random number between 1 and 6:", randomNumber);
+            var decisionWeight = randomNumber * 10;
+            // Send randomNumber and decisionWeight to decisionAI_King.js
+
+            processRandomNumber(randomNumber, decisionWeight);
+            monsterBehaviourStandard();
+            knightBehaviourStandard();
+
+            // Display GlobalState.trustInKing at the bottom of the screen
+            const trustDisplay = document.getElementById('trustDisplay');
+            if (!trustDisplay) {
+                const trustElement = document.createElement('div');
+                trustElement.id = 'trustDisplay';
+                trustElement.style.position = 'fixed';
+                trustElement.style.bottom = '10px';
+                trustElement.style.left = '50%';
+                trustElement.style.transform = 'translateX(-50%)';
+                trustElement.style.background = 'white';
+                trustElement.style.color = 'black'; // Fixed color to make it visible
+                trustElement.style.padding = '10px';
+                trustElement.style.borderRadius = '5px';
+                trustElement.style.zIndex = '1001';
+                document.body.appendChild(trustElement);
+            }
+            const trustValue = GlobalState.trustInKing ?? 'N/A'; // Correctly access GlobalState
+            document.getElementById('trustDisplay').textContent = `Trust In King: ${trustValue}`;
+        }
+
+        function showPopup(content) {
+            const popup = document.getElementById('popup');
+            const popupContent = document.getElementById('popupContent');
+            
+            // Append new content instead of replacing existing content
+            popupContent.innerHTML += `<p>${content}</p>`;
+            popup.style.display = 'block';
+        }
+
+        function closePopup() {
+            const popup = document.getElementById('popup');
+            const popupContent = document.getElementById('popupContent');
+            
+            // Clear the content when closing the popup
+            popupContent.innerHTML = '';
+            popup.style.display = 'none';
+        }
+
+        const newsMessages = [];
+
+        function showPopupNews(message) {
+            // Add the message to the newsMessages array
+            newsMessages.unshift(message);
+            if (newsMessages.length > 3) {
+            newsMessages.pop(); // Keep only the latest 3 messages
+            }
+
+            // Update the sidebar with the latest messages
+            const newsList = document.getElementById('newsList');
+            newsList.innerHTML = '';
+            newsMessages.forEach(msg => {
+            const listItem = document.createElement('li');
+            listItem.textContent = msg;
+            listItem.style.marginBottom = '10px';
+            newsList.appendChild(listItem);
+
+            // Add a horizontal line under each message
+            const hr = document.createElement('hr');
+            hr.style.border = '1px solid white';
+            newsList.appendChild(hr);
+            });
+        }
+
+        function openSidebar() {
+            document.getElementById('sidebar').style.display = 'block';
+        }
+
+        function closeSidebar() {
+            document.getElementById('sidebar').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

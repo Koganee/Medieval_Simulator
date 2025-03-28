@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tilemap</title>
+    <style>
+        canvas {
+            display: block;
+            margin: 0 auto;
+            background-color: #000;
+        }
+    </style>
+    <button id="start" style = "text-align: center;" onclick="window.location.href='play.html'">Start</button>
+</head>
+<body>
+    <canvas id="tilemapCanvas"></canvas>
+    <script>
+        const canvas = document.getElementById('tilemapCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const kingTotal = 1;
+        var knightTotal = 20;
+        var peasantTotal = 50;
+        var merchantTotal = 15;
+        var banditTotal = 8;
+        var artistTotal = 5;
+        var mercenaryTotal = 10;
+        var monsterTotal = 25;
+
+        // Set canvas dimensions
+        canvas.width = 1800;
+        canvas.height = 900;
+
+        // Tilemap configuration
+        const tileSize = 5; // Size of each tile
+        const rows = canvas.height / tileSize;
+        const cols = canvas.width / tileSize;
+
+        // Render the tilemap
+        for (let row = 0; row < rows; row++) {
+            for (let col = 0; col < cols; col++) {
+                ctx.fillStyle = "green";
+                ctx.fillRect(col * tileSize, row * tileSize, tileSize, tileSize);
+            }
+        }
+
+        // Generate two random numbers less than the rows and columns
+        const randomRow = Math.floor(Math.random() * rows);
+        const randomCol = Math.floor(Math.random() * cols);
+
+        console.log(`Random Row: ${randomRow}, Random Column: ${randomCol}`);
+        // Fill the corresponding tile gold
+        ctx.fillStyle = "gold";
+        ctx.fillRect(randomCol * tileSize, randomRow * tileSize, tileSize, tileSize);
+
+        for(let i = 0; i < artistTotal; i++)
+        {
+            const randomRow = Math.floor(Math.random() * rows);
+            const randomCol = Math.floor(Math.random() * cols);
+            ctx.fillStyle = "purple";
+            ctx.fillRect(randomCol * tileSize, randomRow * tileSize, tileSize, tileSize);
+        }
+        for(let i = 0; i < merchantTotal; i++)
+        {
+            const randomRow = Math.floor(Math.random() * rows);
+            const randomCol = Math.floor(Math.random() * cols);
+            ctx.fillStyle = "blue";
+            ctx.fillRect(randomCol * tileSize, randomRow * tileSize, tileSize, tileSize);
+        }
+        for(let i = 0; i < knightTotal; i++)
+        {
+            const randomRow = Math.floor(Math.random() * rows);
+            const randomCol = Math.floor(Math.random() * cols);
+            ctx.fillStyle = "white";
+            ctx.fillRect(randomCol * tileSize, randomRow * tileSize, tileSize, tileSize);
+        }
+        for(let i = 0; i < banditTotal; i++)
+        {
+            const randomRow = Math.floor(Math.random() * rows);
+            const randomCol = Math.floor(Math.random() * cols);
+            ctx.fillStyle = "orange";
+            ctx.fillRect(randomCol * tileSize, randomRow * tileSize, tileSize, tileSize);
+        }
+        for(let i = 0; i < peasantTotal; i++)
+        {
+            const randomRow = Math.floor(Math.random() * rows);
+            const randomCol = Math.floor(Math.random() * cols);
+            ctx.fillStyle = "grey";
+            ctx.fillRect(randomCol * tileSize, randomRow * tileSize, tileSize, tileSize);
+        }
+        for(let i = 0; i < monsterTotal; i++)
+        {
+            const randomRow = Math.floor(Math.random() * rows);
+            const randomCol = Math.floor(Math.random() * cols);
+            ctx.fillStyle = "darkpurple";
+            ctx.fillRect(randomCol * tileSize, randomRow * tileSize, tileSize, tileSize);
+        }
+        for(let i = 0; i < mercenaryTotal; i++)
+        {
+            const randomRow = Math.floor(Math.random() * rows);
+            const randomCol = Math.floor(Math.random() * cols);
+            ctx.fillStyle = "darkgreen";
+            ctx.fillRect(randomCol * tileSize, randomRow * tileSize, tileSize, tileSize);
+        }
+    </script>
+</body>
+</html>
