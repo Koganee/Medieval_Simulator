@@ -1,0 +1,22 @@
+window.artistNames = [
+    "Leonardo da Medieval",
+    "Raphael of the Realm",
+    "Michelangelo the Bold",
+    "Donatello of the Brush",
+    "Van Gogh the Visionary",
+    "Rembrandt of the Kingdom",
+    "Picasso the Peculiar",
+    "Monet of the Meadows",
+    "Da Vinci the Dreamer",
+    "Caravaggio the Chiaroscuro",
+    "El Greco the Mystic",
+    "Titian the Timeless",
+    "Vermeer of the Village",
+    "Goya the Grim",
+    "Klimt of the Court",
+    "Matisse the Magnificent",
+    "Dürer the Detailed",
+    "Hokusai of the Waves",
+    "Frida of the Fortress",
+    "Warhol the Whimsical"
+];
